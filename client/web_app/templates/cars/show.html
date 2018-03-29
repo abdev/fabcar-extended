@@ -1,0 +1,22 @@
+<div class="page-header">
+  <h1>Car#Show</h1>
+</div>
+
+<ul class="list-unstyled list-inline">
+  <li><a href="<%= carsPath() %>" class="btn btn-info">Back to all Cars</a></li>
+  <li><a href="<%= editCarPath({ car_id: car.ID })%>" class="btn btn-warning">Edit</a></li>
+  <li><a href="<%= carPath({ car_id: car.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+</ul>
+
+<p>
+  <strong>Make</strong>: <%= car.Make %>
+</p>
+<p>
+  <strong>Model</strong>: <%= car.Model %>
+</p>
+<p>
+  <strong>Colour</strong>: <%= car.Colour %>
+</p>
+<p>
+  <strong>User</strong>: <%= car.UserID %>
+</p>

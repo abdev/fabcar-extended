@@ -1,0 +1,7 @@
+create_table("cars", func(t) {
+	t.Column("id", "uuid", {"primary": true})
+	t.Column("make", "string", {})
+	t.Column("model", "string", {})
+	t.Column("colour", "string", {})
+	t.Column("user_id", "uuid", {})
+})

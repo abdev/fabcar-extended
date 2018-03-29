@@ -1,0 +1,10 @@
+create_table("car_logs", func(t) {
+	t.Column("id", "uuid", {"primary": true})
+	t.Column("car_id", "uuid", {})
+	t.Column("transaction_id", "string", {})
+	t.Column("block_id", "string", {})
+	t.Column("payload", "string", {})
+	t.Column("datum", "string", {})
+	t.Column("submitted_on", "datetime", {})
+	t.Column("updated_on", "datetime", {})
+})

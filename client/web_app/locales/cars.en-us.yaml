@@ -1,0 +1,6 @@
+- id: "car.created.success"
+  translation: "Car was successfully created."
+- id: "car.updated.success"
+  translation: "Car was successfully updated."
+- id: "car.destroyed.success"
+  translation: "Car was successfully destroyed."
