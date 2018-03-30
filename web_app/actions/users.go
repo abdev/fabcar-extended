@@ -53,19 +53,24 @@ func (v UsersResource) List(c buffalo.Context) error {
 // Show gets the data for one User. This function is mapped to
 // the path GET /users/{user_id}
 func (v UsersResource) Show(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
-
-	// Allocate an empty User
-	user := &models.User{}
+	tx, user, err := loadUser(c)
 
 	// To find the User the parameter user_id is used.
-	if err := tx.Find(user, c.Param("user_id")); err != nil {
+	if err != nil {
 		return c.Error(404, err)
 	}
+
+	tx.Load(user)
+
+	c.Set("getUser", func(car models.Car) string {
+		tx, _ := c.Value("tx").(*pop.Connection)
+		user := &models.User{}
+
+		if err := tx.Find(user, car.UserID); err != nil {
+			return ""
+		}
+		return user.Name
+	})
 
 	return c.Render(200, r.Auto(c, user))
 }
@@ -118,16 +123,9 @@ func (v UsersResource) Create(c buffalo.Context) error {
 // Edit renders a edit form for a User. This function is
 // mapped to the path GET /users/{user_id}/edit
 func (v UsersResource) Edit(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
+	_, user, err := loadUser(c)
 
-	// Allocate an empty User
-	user := &models.User{}
-
-	if err := tx.Find(user, c.Param("user_id")); err != nil {
+	if err != nil {
 		return c.Error(404, err)
 	}
 
@@ -137,18 +135,7 @@ func (v UsersResource) Edit(c buffalo.Context) error {
 // Update changes a User in the DB. This function is mapped to
 // the path PUT /users/{user_id}
 func (v UsersResource) Update(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
-
-	// Allocate an empty User
-	user := &models.User{}
-
-	if err := tx.Find(user, c.Param("user_id")); err != nil {
-		return c.Error(404, err)
-	}
+	tx, user, err := loadUser(c)
 
 	// Bind User to the html form elements
 	if err := c.Bind(user); err != nil {
@@ -179,17 +166,9 @@ func (v UsersResource) Update(c buffalo.Context) error {
 // Destroy deletes a User from the DB. This function is mapped
 // to the path DELETE /users/{user_id}
 func (v UsersResource) Destroy(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
+	tx, user, err := loadUser(c)
 
-	// Allocate an empty User
-	user := &models.User{}
-
-	// To find the User the parameter user_id is used.
-	if err := tx.Find(user, c.Param("user_id")); err != nil {
+	if err != nil {
 		return c.Error(404, err)
 	}
 
@@ -202,6 +181,25 @@ func (v UsersResource) Destroy(c buffalo.Context) error {
 
 	// Redirect to the users index page
 	return c.Render(200, r.Auto(c, user))
+}
+
+func loadUser(c buffalo.Context) (*pop.Connection, *models.User, error) {
+	// Get the DB connection from the context
+	tx, ok := c.Value("tx").(*pop.Connection)
+
+	// Allocate an empty User
+	user := &models.User{}
+
+	if !ok {
+		return tx, user, errors.WithStack(errors.New("no transaction found"))
+	}
+
+	// To find the User the parameter user_id is used.
+	if err := tx.Find(user, c.Param("user_id")); err != nil {
+		return tx, user, err
+	}
+
+	return tx, user, nil
 }
 
 func SetUsers(next buffalo.Handler) buffalo.Handler {

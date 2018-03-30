@@ -19,7 +19,7 @@
       <td><%= car.Make %></td>
         <td><%= car.Model %></td>
         <td><%= car.Colour %></td>
-        <td><%= car.UserID %></td>
+        <td><%= car.Owner.Name %></td>
         <td>
           <div class="pull-right">
             <a href="<%= carPath({ car_id: car.ID }) %>" class="btn btn-info">View</a>

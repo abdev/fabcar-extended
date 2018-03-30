@@ -41,7 +41,7 @@ func (v CarsResource) List(c buffalo.Context) error {
 
 	// Paginate results. Params "page" and "per_page" control pagination.
 	// Default values are "page=1" and "per_page=20".
-	q := tx.PaginateFromParams(c.Params())
+	q := tx.Eager().PaginateFromParams(c.Params())
 
 	// Retrieve all Cars from the DB
 	if err := q.All(cars); err != nil {
@@ -70,6 +70,8 @@ func (v CarsResource) Show(c buffalo.Context) error {
 	if err := tx.Find(car, c.Param("car_id")); err != nil {
 		return c.Error(404, err)
 	}
+
+	tx.Load(car)
 
 	return c.Render(200, r.Auto(c, car))
 }
