@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./dockerfile-web-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database  
+  
+  database:
+        image: mysql:5.7.21
+        restart: always       
+        environment:
+            - MYSQL_DATABASE=fabcar_extended_dev
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=test
+            - MYSQL_PASSWORD=test
+        ports:
+            - "8900:3306"
+
+ 
+
+
