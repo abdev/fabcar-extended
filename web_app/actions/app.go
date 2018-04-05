@@ -7,8 +7,7 @@ import (
 	"github.com/gobuffalo/envy"
 	"github.com/unrolled/secure"
 
-	bc "github.com/abdev/fabcar-extended/client/blockchain_client"
-	"github.com/abdev/fabcar-extended/client/web_app/models"
+	"github.com/abdev/fabcar-extended/web_app/models"
 	"github.com/gobuffalo/buffalo/middleware/csrf"
 	"github.com/gobuffalo/buffalo/middleware/i18n"
 	"github.com/gobuffalo/packr"
@@ -61,17 +60,17 @@ func App() *buffalo.App {
 
 		app.Resource("/users", UsersResource{})
 
-		app.Use(SetUsers)
-
 		app.Resource("/cars", CarsResource{})
 		app.Resource("/car_logs", CarLogsResource{})
-		app.ServeFiles("/", assetsBox) // serve files from the public directory
 
-		err = bc.StartClient()
+		/*err = bc.StartClient()
 
 		if err != nil {
 			panic(err)
-		}
+		}*/
+		app.GET("/energy_data/uploadFile", UploadFile)
+		app.POST("/energy_data/processUploadFile", ProcessUploadFile)
+		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 
 	return app

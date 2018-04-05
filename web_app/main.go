@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/abdev/fabcar-extended/client/web_app/actions"
+	"github.com/abdev/fabcar-extended/web_app/actions"
 )
 
 func main() {

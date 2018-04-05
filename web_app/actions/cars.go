@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	bc "github.com/abdev/fabcar-extended/client/blockchain_client"
-	"github.com/abdev/fabcar-extended/client/web_app/models"
+	bc "github.com/abdev/fabcar-extended/blockchain_client"
+	"github.com/abdev/fabcar-extended/web_app/models"
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
 	"github.com/pkg/errors"

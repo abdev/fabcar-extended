@@ -1,0 +1,12 @@
+<div class="page-header">
+    <h1>Upload new file</h1>
+</div>
+
+<%= form_for(energy, {action: energyDataProcessUploadFilePath(), method: "POST"}) { %>
+    <%= f.InputTag("Name") %>
+    <%= f.CheckboxTag("Option.test1", {label: "Option1", value: "option1"}) %>
+    <%= f.CheckboxTag("Option.test2", {label: "Option2", value: "option2"}) %>
+    <%= f.FileTag("EnergyFile") %>
+    <button class="btn btn-success" role="submit">Save</button>
+    <a href="<%= energyDataUploadFilePath() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>

@@ -1,13 +1,13 @@
 development:
   dialect: "mysql"
   database: "fabcar_extended_dev"
-  host: "localhost"
+  host: "database"
   port: "3306"
-  user: "dbdesigner"
-  password: "model"
+  user: "root"
+  password: "root"
 
 test:
-  url: {{envOr "TEST_DATABASE_URL" "mysql://dbdesigner:model@(localhost:3306)/web_app_test?parseTime=true&multiStatements=true&readTimeout=1s"}}
+  url: {{envOr "TEST_DATABASE_URL" "mysql://root:root@(database:3306)/web_app_test?parseTime=true&multiStatements=true&readTimeout=1s"}}
 
 production:
-  url: {{envOr "DATABASE_URL" "mysql://dbdesigner:model@(localhost:3306)/web_app_production?parseTime=true&multiStatements=true&readTimeout=1s"}}
+  url: {{envOr "DATABASE_URL" "mysql://root:root@(database:3306)/web_app_production?parseTime=true&multiStatements=true&readTimeout=1s"}}

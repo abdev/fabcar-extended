@@ -8,7 +8,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/abdev/fabcar-extended/client/web_app/models"
+	"github.com/abdev/fabcar-extended/web_app/models"
 	"github.com/gobuffalo/uuid"
 	"github.com/tendermint/tendermint/rpc/client"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -73,18 +73,19 @@ func StartClient() error {
 	go func() {
 		for e := range txs {
 			data := e.(types.TMEventData).Unwrap().(types.EventDataTx)
-			fmt.Println("Response from tendermint ", data.TxResult.Result.Info)
+			tags, _ := json.Marshal(data.Result.GetTags())
+			fmt.Println("Response from tendermint ", string(tags))
 		}
 	}()
 
 	resultStatus, err := httpClient.ABCIQuery("allCars", nil)
 
-	fmt.Println("Query all car", string(resultStatus.Response.Value))
-
 	if err != nil {
 		fmt.Println("we have an error in query")
 		panic(err)
 	}
+
+	fmt.Println("Query all car", string(resultStatus.Response.Value))
 
 	//log.Println(httpClient)
 
